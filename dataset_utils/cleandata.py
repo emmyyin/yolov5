@@ -51,7 +51,11 @@ def main():
     path = 'oidv6'     # path to current csv files
 
     for mode in ['train', 'test', 'validation']:
-        get_labels(path, mode, mapping)
+        get_clean_annotation_boxes(path, mode, class_map)
+        get_clean_imageids(path, mode)
+
+        # download images using downloader.py and the created imageid-files, then run get_labels
+        # get_labels(path, mode, mapping)
 
 
 if __name__ == '__main__':
