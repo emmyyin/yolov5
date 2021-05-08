@@ -21,3 +21,5 @@ The dataset labels should be in the following, normalized format:
 <class> <x-center> <y-center> <width> <height>
 ```
 where ``<class>`` is the index of the class.
+
+There are help functions in ``dataset_utils`` to get and format the data. Download the train, validation and test box annotation csv files from [Open Images Dataset V6](https://storage.googleapis.com/openimages/web/download.html) and use ``cleandata.py`` and ``downloader.py`` to clean the annotation csv files from unnecessary data and download the images for the dataset.
