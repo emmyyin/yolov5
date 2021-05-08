@@ -38,8 +38,8 @@ def get_labels(path, mode, mapping):
             ycenter = float(row['YMin']) + (height / 2)
             id = row['ImageID']
 
-            file = open(os.path.join(path, mode, 'labels', id+'.txt'), 'w+')
-            file.write(f"{c} {xcenter} {ycenter} {width} {height}")
+            file = open(os.path.join(path, mode, 'labels', id+'.txt'), 'a')
+            file.write(f"{c} {xcenter} {ycenter} {width} {height}\n")
             file.close()
 
 
@@ -48,9 +48,10 @@ def main():
     mapping = {'/m/0mkg': 0, '/m/01xqw': 1, '/m/05r5c': 2, '/m/06ncr': 3, '/m/07gql': 4, '/m/07y_7': 5}
     class_map = {'/m/0mkg': 'accordion', '/m/01xqw': 'cello', '/m/05r5c': 'piano', '/m/06ncr': 'saxophone', '/m/07gql': 'trumpet', '/m/07y_7': 'violin'}
 
-    path = './'     # path to current csv files
-    new_path = './'     # where new csv files should be stored. set same as path if you want to overwrite existing files
+    path = 'oidv6'     # path to current csv files
 
+    for mode in ['train', 'test', 'validation']:
+        get_labels(path, mode, mapping)
 
 
 if __name__ == '__main__':
