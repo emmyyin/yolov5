@@ -100,6 +100,10 @@ def train(hyp, opt, device, tb_writer=None):
 
     # Freeze
     freeze = []  # parameter names to freeze (full or partial)
+    if opt.freeze == 'backbone':
+        freeze = ['model.%s.' % x for x in range(10)]
+    elif opt.freeze == 'all':
+        freeze = ['model.%s.' % x for x in range(24)]
     for k, v in model.named_parameters():
         v.requires_grad = True  # train all layers
         if any(x in k for x in freeze):
@@ -491,6 +495,7 @@ if __name__ == '__main__':
     parser.add_argument('--artifact_alias', type=str, default="latest", help='version of dataset artifact to be used')
 
     parser.add_argument('--augment', action='store_true', help='apply data augmentation')
+    parser.add_argument('--freeze', type=str, default='', help='backbone or all')
     opt = parser.parse_args()
 
     # Set DDP variables
