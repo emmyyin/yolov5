@@ -551,19 +551,21 @@ class LoadImagesAndLabels(Dataset):  # for training/testing
         if self.augment:
             # Augment imagespace
             if not mosaic:
-                img, labels = random_perspective(img, labels,
-                                                 degrees=hyp['degrees'],
-                                                 translate=hyp['translate'],
-                                                 scale=hyp['scale'],
-                                                 shear=hyp['shear'],
-                                                 perspective=hyp['perspective'])
+                if random.random() < hyp['imagespace']:
+                    img, labels = random_perspective(img, labels,
+                                                     degrees=hyp['degrees'],
+                                                     translate=hyp['translate'],
+                                                     scale=hyp['scale'],
+                                                     shear=hyp['shear'],
+                                                     perspective=hyp['perspective'])
 
             # Augment colorspace
-            augment_hsv(img, hgain=hyp['hsv_h'], sgain=hyp['hsv_s'], vgain=hyp['hsv_v'])
+            if random.random() < hyp['colorspace']:
+                augment_hsv(img, hgain=hyp['hsv_h'], sgain=hyp['hsv_s'], vgain=hyp['hsv_v'])
 
             # Apply cutouts
-            # if random.random() < 0.9:
-            #     labels = cutout(img, labels)
+            if random.random() < hyp['cutout']:
+                img, labels = cutout(img, labels)
 
         nL = len(labels)  # number of labels
         if nL:
@@ -991,7 +993,7 @@ def cutout(image, labels):
             ioa = bbox_ioa(box, labels[:, 1:5])  # intersection over area
             labels = labels[ioa < 0.60]  # remove >60% obscured labels
 
-    return labels
+    return image, labels
 
 
 def create_folder(path='./new'):
