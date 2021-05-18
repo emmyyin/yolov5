@@ -559,6 +559,14 @@ class LoadImagesAndLabels(Dataset):  # for training/testing
                                                      shear=hyp['shear'],
                                                      perspective=hyp['perspective'])
 
+
+                if random.random() < hyp['mixup']:
+                    index2 = self.indices[random.randint(0, self.n - 1)]
+                    img2, (h02, w02), (h2, w2) = load_image(self, index2)
+                    labels2 = self.labels[index2].copy()
+                    r = np.random.beta(8.0, 8.0)  # mixup ratio, alpha=beta=8.0
+                    img = (img * r + img2 * (1 - r)).astype(np.uint8)
+
             # Augment colorspace
             if random.random() < hyp['colorspace']:
                 augment_hsv(img, hgain=hyp['hsv_h'], sgain=hyp['hsv_s'], vgain=hyp['hsv_v'])
