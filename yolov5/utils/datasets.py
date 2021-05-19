@@ -563,6 +563,8 @@ class LoadImagesAndLabels(Dataset):  # for training/testing
                 if random.random() < hyp['mixup']:
                     index2 = self.indices[random.randint(0, self.n - 1)]
                     img2, (h02, w02), (h2, w2) = load_image(self, index2)
+                    img2, ratio, pad = letterbox(img2, shape, auto=False, scaleup=self.augment)
+
                     labels2 = self.labels[index2].copy()
                     r = np.random.beta(8.0, 8.0)  # mixup ratio, alpha=beta=8.0
                     img = (img * r + img2 * (1 - r)).astype(np.uint8)
